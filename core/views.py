@@ -1,10 +1,36 @@
 from django.http import HttpResponse, JsonResponse
 from django.shortcuts import redirect, render
-
+from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.models import User
 from core.forms import ProductForm
 from core.models import Product
 
+
 # Create your views here.
+
+def login(request):
+    if request.method == 'GET':
+        return render(request, "core/autentication/login.html", {
+            'form': UserCreationForm()
+        })
+    else:
+        if request.POST['password1'] == request.POST['password2']:
+            try:
+                user = User.objects.create_user(username=request.POST['username'], password=request.POST['password1'])
+                user.save()
+                return render(request, "core/autentication/login.html", {
+                    'form': UserCreationForm(),
+                    'error': 'Usuario creado'
+                })
+            except:
+                return render(request, "core/autentication/login.html", {
+                    'form': UserCreationForm(),
+                    'error': 'Usuario ya existe'
+                })
+        return render(request, "core/autentication/login.html", {
+            'form': UserCreationForm(),
+            "error": "Contraseña incorrecta"
+        })
 
 def home(request):
    data = {
@@ -33,6 +59,10 @@ def product_List(request):
     return render(request,"core/products/list.html",data)
 # crear un producto
 def product_create(request):
+    
+    
+    
+    
     data = {"title1": "Productos","title2": "Ingreso De Productos"}
    
     if request.method == "POST":
