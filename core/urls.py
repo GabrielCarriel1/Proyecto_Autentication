@@ -12,5 +12,7 @@ urlpatterns = [
    path('brand_list/', views.brand_List,name='brand_list'),
    # urls de proveedores
    path('supplier_list/', views.supplier_List,name='supplier_list'),
-   path('login/', views.login,name='login'),
+   path('signup/', views.signup,name='signup'),
+   path('login/', views.iniciar_sesion,name='login'),
+   path('logout/', views.cerrar_sesion,name='logout'),
 ]

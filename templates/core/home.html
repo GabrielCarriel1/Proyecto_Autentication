@@ -1,5 +1,22 @@
-{% extends 'base.html' %}
-{% block content %}
-  {{title2}}
-  <h2>Estoy en el home</h2>
-{% endblock content  %}
+{% extends 'base.html' %} {% block content %}
+<main class="container py-5">
+  <section class="card card-body">
+    <h1 class="display-3 text-center">BIENVENIDOS AL SUPER MARKET</h1>
+    <p>
+      ¡Bienvenido al Sistema de Supermercado! Este sistema está diseñado para
+      facilitar la gestión y operación de un supermercado. Podrás realizar
+      tareas como gestionar productos, marcas, proveedores, ventas y mucho más.
+      ¡Esperamos que disfrutes utilizando nuestro sistema!
+    </p>
+    <div class="text-center">
+      {% if user.is_authenticated %}
+      <p>Bienvenido, {{ user.username }}</p>
+      <a class="btn btn-success" href="/logout/">CERRAR SESIÓN</a>
+      {% else %}
+      <a class="btn btn-success" href="/signup/">REGISTRARSE</a>
+      <a class="btn btn-success" href="/login/">INICIAR SESIÓN</a>
+      {% endif %}
+    </div>
+  </section>
+</main>
+{% endblock content %}

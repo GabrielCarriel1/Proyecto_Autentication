@@ -1,43 +1,69 @@
-from django.http import HttpResponse, JsonResponse
+
 from django.shortcuts import redirect, render
-from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth.models import User
+from django.contrib.auth import login,logout, authenticate
 from core.forms import ProductForm
 from core.models import Product
+from django.db import IntegrityError
+import re
 
 
-# Create your views here.
-
-def login(request):
+def signup(request):
     if request.method == 'GET':
-        return render(request, "core/autentication/login.html", {
-            'form': UserCreationForm()
-        })
+        return render(request, "core/authentication/signup.html", {'form': UserCreationForm()})
     else:
-        if request.POST['password1'] == request.POST['password2']:
-            try:
-                user = User.objects.create_user(username=request.POST['username'], password=request.POST['password1'])
-                user.save()
-                return render(request, "core/autentication/login.html", {
-                    'form': UserCreationForm(),
-                    'error': 'Usuario creado'
-                })
-            except:
-                return render(request, "core/autentication/login.html", {
-                    'form': UserCreationForm(),
-                    'error': 'Usuario ya existe'
-                })
-        return render(request, "core/autentication/login.html", {
-            'form': UserCreationForm(),
-            "error": "Contraseña incorrecta"
-        })
+        form = UserCreationForm(request.POST)
+        
+        # Validación de contraseña
+        password1 = request.POST.get('password1')
+        password2 = request.POST.get('password2')
+        if len(password1) < 8 or not re.search(r'[!@#$%^&*()<>?/\|}{~:]', password1):
+            return render(request, "core/authentication/signup.html", {'form': form, 'error': 'La contraseña debe tener al menos 8 caracteres y al menos un carácter especial.'})
+        
+        if form.is_valid():
+            username = form.cleaned_data['username']
+            
+            if password1 == password2:
+                if User.objects.filter(username=username).exists():
+                    return render(request, "core/authentication/signup.html", {'form': UserCreationForm(), 'error': 'El nombre de usuario ya está en uso.'})
+                else:
+                    user = User.objects.create_user(username=username, password=password1)
+                    user.save()
+                    login(request, user)
+                    return redirect('core:login')
+            else:
+                return render(request, "core/authentication/signup.html", {'form': form, 'error': 'Las contraseñas no coinciden.'})
+        else:
+            return render(request, "core/authentication/signup.html", {'form': form, 'error': 'Por favor corrija los errores en el formulario.'})
+
+def iniciar_sesion(request):
+    if request.method == 'GET':
+        return render(request, 'core/login/login.html', {'form': AuthenticationForm()})
+    else:
+        form = AuthenticationForm(data=request.POST)
+        if form.is_valid():
+            username = form.cleaned_data.get('username')
+            password = form.cleaned_data.get('password')
+            user = authenticate(request, username=username, password=password)
+            if user is not None:
+                login(request, user)
+                return redirect('home')
+            else:
+                return render(request, 'core/login/login.html', {'form': AuthenticationForm(), 'error': "Usuario o contraseña incorrectos"})
+        else:
+            return render(request, 'core/login/login.html', {'form': form, 'error': "Datos de inicio de sesión inválidos"})
+
+
+
+def cerrar_sesion(request):
+    logout(request)
+    return redirect ('home')  
+
 
 def home(request):
-   data = {
-        "title1":"Autor | TeacherCode",
-        "title2":"Super Mercado Economico"
-   }
-   return render(request,'core/home.html',data)
+   
+   return render(request,'core/home.html')
 
   #  return HttpResponse(f"<h1>{data['title2']}<h1>\
   #                        <h2>Le da la Bienvenida  a su selecta clientela</h2>")

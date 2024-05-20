@@ -45,26 +45,26 @@ class Product(models.Model):
         FERRISARITO = 'FS', 'Ferrisariato'
         COMISARIATO = 'CS', 'Comisariato'
         
-    description = models.CharField('Articulo',max_length=100)
-    price=models.DecimalField('Precio',max_digits=10,decimal_places=2,default=Decimal('0.0'))
-    stock=models.IntegerField('Stock',default=100)
-    expiration_date = models.DateTimeField('Fecha Caducidad',default=timezone.now()+datetime.timedelta(days=30))
-    brand = models.ForeignKey(Brand,on_delete=models.CASCADE,related_name='product',verbose_name='Marca')
-    user = models.ForeignKey(User,on_delete=models.CASCADE)
-    supplier = models.OneToOneField(Supplier,on_delete=models.CASCADE,verbose_name='Proveedor')
-    categories = models.ManyToManyField('Category',verbose_name='Categoria')
-    line = models.CharField('Linea',max_length=2,choices=Status.choices,default=Status.COMISARIATO)
-    image = models.ImageField(upload_to='products/',blank=True,null=True,default='products/default.png')
+    description = models.CharField('Artículo', max_length=100)
+    price = models.DecimalField('Precio', max_digits=10, decimal_places=2, default=Decimal('0.0'))
+    stock = models.IntegerField('Stock', default=100)
+    expiration_date = models.DateTimeField('Fecha Caducidad', default=timezone.now() + datetime.timedelta(days=30))
+    brand = models.ForeignKey(Brand, on_delete=models.CASCADE, related_name='products', verbose_name='Marca')
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    supplier = models.OneToOneField(Supplier, on_delete=models.CASCADE, verbose_name='Proveedor')
+    categories = models.ManyToManyField('Category', verbose_name='Categoría')
+    line = models.CharField('Línea', max_length=2, choices=Status.choices, default=Status.COMISARIATO)
+    image = models.ImageField(upload_to='products/', blank=True, null=True, default='products/default.png')
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
-    state = models.BooleanField('Estado', default = True)
+    state = models.BooleanField('Estado', default=True)
 
     class Meta:
         verbose_name = 'Producto'
         verbose_name_plural = 'Productos'
         ordering = ['description']
         indexes = [models.Index(fields=['description']),]
-           
+
     def __str__(self):
         return self.description
      
