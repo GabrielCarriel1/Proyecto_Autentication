@@ -7,15 +7,17 @@ from core.forms import ProductForm
 from core.models import Product
 from django.db import IntegrityError
 import re
+from django.contrib.auth.decorators import login_required
 
 
 def signup(request):
+    if request.user.is_authenticated:
+        return redirect('home')
     if request.method == 'GET':
         return render(request, "core/authentication/signup.html", {'form': UserCreationForm()})
     else:
         form = UserCreationForm(request.POST)
         
-        # Validación de contraseña
         password1 = request.POST.get('password1')
         password2 = request.POST.get('password2')
         if len(password1) < 8 or not re.search(r'[!@#$%^&*()<>?/\|}{~:]', password1):
@@ -38,6 +40,8 @@ def signup(request):
             return render(request, "core/authentication/signup.html", {'form': form, 'error': 'Por favor corrija los errores en el formulario.'})
 
 def iniciar_sesion(request):
+    if request.user.is_authenticated:
+        return redirect('home')
     if request.method == 'GET':
         return render(request, 'core/login/login.html', {'form': AuthenticationForm()})
     else:
@@ -74,7 +78,8 @@ def home(request):
  
   #  return HttpResponse(f"<h1>{data['title2']}<h1>\
   #                      <h2>Le da la Bienvenida  a su selecta clientela</h2>")
-# vistas de productos: listar productos 
+# vistas de productos: listar productos
+@login_required
 def product_List(request):
     data = {
         "title1": "Productos",
@@ -84,10 +89,8 @@ def product_List(request):
     data["products"]=products
     return render(request,"core/products/list.html",data)
 # crear un producto
+@login_required
 def product_create(request):
-    
-    
-    
     
     data = {"title1": "Productos","title2": "Ingreso De Productos"}
    
@@ -106,6 +109,7 @@ def product_create(request):
     return render(request, "core/products/form.html", data)
 
 # editar un producto
+@login_required
 def product_update(request,id):
     data = {"title1": "Productos","title2": ">Edicion De Productos"}
     product = Product.objects.get(pk=id)
@@ -121,6 +125,7 @@ def product_update(request,id):
 
 
 # eliminar un producto
+@login_required
 def product_delete(request,id):
     product = Product.objects.get(pk=id)
     data = {"title1":"Eliminar","title2":"Eliminar Un Producto","product":product}
@@ -131,13 +136,14 @@ def product_delete(request,id):
     return render(request, "core/products/delete.html", data)
 
 # vistas de marcas: Listar marcas
+@login_required
 def brand_List(request):
     data = {
         "title1": "Marcas",
         "title2": "Consulta De Marcas De Productos"
     }
     return render(request,"core/brands/list.html",data)
-
+@login_required
 def supplier_List(request):
     data = {
         "title1": "Proveedores",
