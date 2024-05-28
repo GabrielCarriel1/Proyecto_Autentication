@@ -3,7 +3,12 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.utils import timezone
 from django.db.models import F 
+<<<<<<< HEAD
 from proy_sales.utils import valida_cedula,phone_regex, valida_ruc
+=======
+from proy_sales.utils import valida_ruc_o_cedula, valida_telefono_ecuador
+from django.core.exceptions import ValidationError
+>>>>>>> 8ab19a2 (casi listo)
 
 
 class ActiveBrandManager(models.Manager):
@@ -13,14 +18,23 @@ class ActiveBrandManager(models.Manager):
  
 class Brand(models.Model):
     description = models.CharField('Nombre de la Marca', max_length=100)
+<<<<<<< HEAD
     logo = models.ImageField(upload_to='brands/',blank=True,null=True,default='brands/default.png')
+=======
+    logo = models.ImageField('Imagen Marca',upload_to='brands/',blank=True,null=True,default='brands/default.png')
+>>>>>>> 8ab19a2 (casi listo)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
     state = models.BooleanField('Activo', default=True)
+<<<<<<< HEAD
 
     objects = models.Manager()  # Manager predeterminado
+=======
+>>>>>>> 8ab19a2 (casi listo)
 
+    objects = models.Manager()  # Manager predeterminado
+    active_brands = ActiveBrandManager()
     class Meta:
         verbose_name = 'Marca'
         verbose_name_plural = 'Marcas'
@@ -35,23 +49,43 @@ class Brand(models.Model):
 class Supplier(models.Model):
     foto = models.ImageField(upload_to='suplier/',blank=True,null=True,default='suppliers/default.png')
     name = models.CharField('nombre',max_length=100)
+<<<<<<< HEAD
     ruc = models.CharField('*Ruc / C.I',max_length=13,validators=[valida_cedula,valida_ruc])
     address = models.CharField('Direccion',max_length=500)
     phone = models.CharField('Nº Celular',max_length=20,validators=[phone_regex])
+=======
+    ruc = models.CharField('*Ingrese Ruc/ C.I',max_length=13,validators=[valida_ruc_o_cedula])
+    address = models.CharField('Direccion',max_length=500)
+    phone = models.CharField('Nº Celular',max_length=20,validators=[valida_telefono_ecuador])
+>>>>>>> 8ab19a2 (casi listo)
     user = models.ForeignKey(User,on_delete=models.CASCADE)
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
     state = models.BooleanField('Activo', default = True)
 
-    class Meta:
-        verbose_name = 'Proveedor'
-        verbose_name_plural = 'Proveedores'
-        ordering = ['name']
-        indexes = [models.Index(fields=['name']),]
-        
-    def __str__(self):
-        return self.name
+    def clean(self):
+        super().clean()
 
+<<<<<<< HEAD
+=======
+        if Supplier.objects.filter(ruc=self.ruc).exclude(id=self.id).exists():
+            raise ValidationError('Ya existe un proveedor con este número de RUC o cédula.')
+
+        if len(self.ruc) == 13:
+            cedula = self.ruc[:10]
+            if Supplier.objects.filter(ruc=cedula).exclude(id=self.id).exists():
+                raise ValidationError('Ya existe un proveedor con un RUC que coincide con esta cédula.')
+
+        if len(self.ruc) == 10:
+            ruc = Supplier.objects.filter(ruc__startswith=self.ruc).exclude(id=self.id)
+            if ruc.exists():
+                raise ValidationError('Ya existe un proveedor con una cédula que coincide con los primeros 10 dígitos de un RUC.')
+
+    def save(self, *args, **kwargs):
+        self.clean()
+        super(Supplier, self).save(*args, **kwargs)
+
+>>>>>>> 8ab19a2 (casi listo)
 class ActiveProductManager(models.Manager):
     def get_queryset(self):
         return super().get_queryset().filter(state=True)
@@ -87,9 +121,13 @@ class Product(models.Model):
         verbose_name_plural = 'Productos'
         ordering = ['description']
         indexes = [models.Index(fields=['description']),]
+<<<<<<< HEAD
            
     def __str__(self):
         return self.description
+=======
+  
+>>>>>>> 8ab19a2 (casi listo)
      
     @property
     def get_categories(self):

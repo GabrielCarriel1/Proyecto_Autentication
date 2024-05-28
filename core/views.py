@@ -250,9 +250,15 @@ def supplier_create(request):
     if request.method == "POST":
         form = SupplierForm(request.POST, request.FILES)
         if form.is_valid():
+<<<<<<< HEAD
             brand = form.save(commit=False)
             brand.user = request.user
             brand.save()
+=======
+            Supplier = form.save(commit=False)
+            Supplier.user = request.user
+            Supplier.save()
+>>>>>>> 8ab19a2 (casi listo)
             return redirect("core:supplier_list")
     else:
         form = SupplierForm()
