@@ -3,12 +3,13 @@ from django.shortcuts import redirect, render
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth.models import User
 from django.contrib.auth import login,logout, authenticate
-from core.forms import ProductForm
-from core.models import Product
+from core.forms import ProductForm, BrandForm, SupplierForm
+from core.models import Product, Brand, Supplier
 from django.db import IntegrityError
 import re
+from django.http import HttpResponse, JsonResponse, HttpResponseRedirect
 from django.contrib.auth.decorators import login_required
-
+from django.views.decorators.cache import never_cache 
 
 def signup(request):
     if request.user.is_authenticated:
@@ -60,9 +61,13 @@ def iniciar_sesion(request):
 
 
 
+
+
 def cerrar_sesion(request):
     logout(request)
-    return redirect ('home')  
+    response = redirect('home')
+    response.delete_cookie('sessionid')
+    return response
 
 
 def home(request):
@@ -79,6 +84,7 @@ def home(request):
   #  return HttpResponse(f"<h1>{data['title2']}<h1>\
   #                      <h2>Le da la Bienvenida  a su selecta clientela</h2>")
 # vistas de productos: listar productos
+@never_cache
 @login_required
 def product_List(request):
     data = {
@@ -90,6 +96,7 @@ def product_List(request):
     return render(request,"core/products/list.html",data)
 # crear un producto
 @login_required
+@never_cache
 def product_create(request):
     
     data = {"title1": "Productos","title2": "Ingreso De Productos"}
@@ -109,9 +116,10 @@ def product_create(request):
     return render(request, "core/products/form.html", data)
 
 # editar un producto
+@never_cache
 @login_required
 def product_update(request,id):
-    data = {"title1": "Productos","title2": ">Edicion De Productos"}
+    data = {"title1": "Productos","title2": "Edicion De Productos"}
     product = Product.objects.get(pk=id)
     if request.method == "POST":
       form = ProductForm(request.POST,request.FILES, instance=product)
@@ -123,9 +131,40 @@ def product_update(request,id):
         data["form"]=form
     return render(request, "core/products/form.html", data)
 
+@login_required
+@never_cache
+def brand_update(request,id):
+    data = {"title1": "Productos","title2": "Edicion De Productos"}
+    brand = Brand.objects.get(pk=id)
+    if request.method == "POST":
+      form = BrandForm(request.POST,request.FILES, instance=brand)
+      if form.is_valid():
+            form.save()
+            return redirect("core:brand_list")
+    else:
+        form = BrandForm(instance=brand)
+        data["form"]=form
+    return render(request, "core/brands/form.html", data)
+
+@login_required
+@never_cache
+def supplier_update(request,id):
+    data = {"title1": "Productos","title2": "Edicion De Proveedores"}
+    supplier = Supplier.objects.get(pk=id)
+    if request.method == "POST":
+      form = SupplierForm(request.POST,request.FILES, instance=supplier)
+      if form.is_valid():
+            form.save()
+            return redirect("core:supplier_list")
+    else:
+        form = SupplierForm(instance=supplier)
+        data["form"]=form
+    return render(request, "core/suppliers/form.html", data)
+
 
 # eliminar un producto
 @login_required
+@never_cache
 def product_delete(request,id):
     product = Product.objects.get(pk=id)
     data = {"title1":"Eliminar","title2":"Eliminar Un Producto","product":product}
@@ -135,19 +174,87 @@ def product_delete(request,id):
  
     return render(request, "core/products/delete.html", data)
 
+@login_required
+@never_cache
+def supplier_delete(request,id):
+    supplier = Supplier.objects.get(pk=id)
+    data = {"title1":"Eliminar","title2":"Eliminar Un Proveedor","supplier":supplier}
+    if request.method == "POST":
+        supplier.delete()
+        return redirect("core:supplier_list")
+ 
+    return render(request, "core/suppliers/delete.html", data)
+
+@login_required
+@never_cache
+def brand_delete(request,id):
+    brand = Brand.objects.get(pk=id)
+    data = {"title1":"Eliminar","title2":"Eliminar una Marca","brand":brand}
+    if request.method == "POST":
+        brand.delete()
+        return redirect("core:brand_list")
+    return render(request, "core/brands/delete.html", data)
 # vistas de marcas: Listar marcas
+@never_cache
 @login_required
 def brand_List(request):
     data = {
         "title1": "Marcas",
         "title2": "Consulta De Marcas De Productos"
     }
-    return render(request,"core/brands/list.html",data)
+    brands = Brand.objects.all()  # Obtener todas las marcas
+    data["brands"] = brands
+    return render(request, "core/brands/list.html", data)
+#crear las marcas 
+@never_cache
+@login_required
+def brand_create(request):
+    data = {
+        "title1": "Crear Marcas",
+        "title2": "Ingreso de Marcas"
+    }
+
+    if request.method == "POST":
+        form = BrandForm(request.POST, request.FILES)
+        if form.is_valid():
+            brand = form.save(commit=False)
+            brand.user = request.user
+            brand.save()
+            return redirect("core:brand_list")
+    else:
+        form = BrandForm()
+
+    data["form"] = form
+    return render(request, "core/brands/form.html", data)
+
+# Listar proveedores
+@never_cache
 @login_required
 def supplier_List(request):
     data = {
         "title1": "Proveedores",
-        "title2": "Consulta De proveedores"
+        "title2": "Consulta De Proveedores"
     }
-    return render(request,"core/suppliers/list.html",data)
+    suppliers = Supplier.objects.all()  # Obtener todos los proveedores
+    data["suppliers"] = suppliers
+    return render(request, "core/suppliers/list.html", data)
   
+@never_cache
+@login_required
+def supplier_create(request):
+    data = {
+        "title1": "Crear Proveedor",
+        "title2": "Ingresar Proveedor"
+    }
+
+    if request.method == "POST":
+        form = SupplierForm(request.POST, request.FILES)
+        if form.is_valid():
+            brand = form.save(commit=False)
+            brand.user = request.user
+            brand.save()
+            return redirect("core:supplier_list")
+    else:
+        form = SupplierForm()
+    data["form"] = form
+    return render(request, "core/suppliers/form.html", data)

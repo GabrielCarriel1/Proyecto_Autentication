@@ -1,0 +1,29 @@
+{% extends 'base.html' %} {% block content %}
+<main class="container">
+  <div class="row">
+    <div class="col-md-6 offset-md-3">
+      <div class="card card-body mt-5">
+        <div class="text-center">
+          <form
+            class="mt-4"
+            method="POST"
+            action="{% url 'core:brand_delete' brand.id %}"
+          >
+            {% csrf_token %}
+            <h1 class="title">{{ title2 }}</h1>
+            <h3>¿Desea eliminar la Marca" {{brand.description }} " ?</h3>
+            <div class="form-group">
+              <button class="btn btn-danger mr-2" type="submit">
+                Eliminar
+              </button>
+              <a class="btn btn-secondary" href="{% url 'core:brand_list' %}"
+                >Cancelar</a
+              >
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+{% endblock content %}
