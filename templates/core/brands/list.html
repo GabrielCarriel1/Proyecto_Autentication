@@ -1,43 +1,57 @@
 {% extends 'base.html' %} {% block content %}
-<h1 class="title text-center">{{ title2 }}</h1>
+
+<h2>{{ title1 }}</h2>
+<h3>{{ title2 }}</h3>
 
 <main class="container">
   <div class="card card-body">
-    <h2 class="text-center">{{ title1 }}</h2>
-    <table class="table table-striped">
-      <thead>
-        <tr>
-          <th>#</th>
-          <th>Logo</th>
-          <th>Descripción</th>
-          <th>Fecha de Creación</th>
-          <th>Estado</th>
-          <th>Acciones</th>
-        </tr>
-      </thead>
-      <tbody>
-        {% for brand in brands %}
-        <tr>
-          <td>{{ forloop.counter }}</td>
-          <td>
-            <img src="{{ brand.logo.url }}" width="50px" />
-          </td>
-          <td>{{ brand.description }}</td>
-          <td>{{ brand.created|date:"d/m/Y H:i" }}</td>
-          <td>{{ brand.state|yesno:"Activo,Inactivo" }}</td>
-          <td>
-            <a href="{% url 'core:brand_update' brand.id %}">✏️</a>
-            <a href="{% url 'core:brand_delete' brand.id %}">❌</a>
-          </td>
-        </tr>
-        {% endfor %}
-      </tbody>
-    </table>
-    <div class="form-group">
-      <a class="btn btn-primary" href="{% url 'core:brand_create' %}"
-        >Añadir Marca</a
-      >
-    </div>
+    <h1 class="title text-center">{{ title2 }}</h1>
+
+    <main class="container">
+      <div class="card card-body">
+        <h2 class="text-center">{{ title1 }}</h2>
+
+        <table class="table table-striped">
+          <thead>
+            <tr>
+              <th>#</th>
+
+              <th>Logo</th>
+              <th>Descripción</th>
+
+              <th>Imagen Marca</th>
+              <th>Nombre marca</th>
+
+              <th>Fecha de Creación</th>
+              <th>Estado</th>
+              <th>Acciones</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for brand in brands %}
+            <tr>
+              <td>{{ forloop.counter }}</td>
+              <td>
+                <img src="{{ brand.logo.url }}" width="50px" />
+              </td>
+              <td>{{ brand.description }}</td>
+              <td>{{ brand.created|date:"d/m/Y H:i" }}</td>
+              <td>{{ brand.state|yesno:"Activo,Inactivo" }}</td>
+              <td>
+                <a href="{% url 'core:brand_update' brand.id %}">✏️</a>
+                <a href="{% url 'core:brand_delete' brand.id %}">❌</a>
+              </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+        <div class="form-group">
+          <a class="btn btn-primary" href="{% url 'core:brand_create' %}"
+            >Añadir Marca</a
+          >
+        </div>
+      </div>
+    </main>
+    {% endblock %}
   </div>
 </main>
-{% endblock %}
