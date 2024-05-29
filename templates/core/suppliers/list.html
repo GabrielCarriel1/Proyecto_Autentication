@@ -1,48 +1,52 @@
 {% extends 'base.html' %} {% block content %}
-<h1 class="title text-center">{{ title2 }}</h1>
 
-<main class="container">
+<main class="container py-5">
   <div class="card card-body">
-    <h2 class="text-center">{{ title1 }}</h2>
-    <h3>{{ title2 }}</h3>
-    <table class="table table-striped">
-      <thead>
-        <tr>
-          <th>#</th>
-          <th>Imagen</th>
-          <th>Nombre</th>
-          <th>Ruc / C.I</th>
-          <th>Direccòn</th>
-          <th>Nº Celular</th>
-          <th>Estado</th>
-          <th>Acciones</th>
-        </tr>
-      </thead>
-      <tbody>
-        {% for supplier in suppliers %}
-        <tr>
-          <td>{{ forloop.counter }}</td>
-          <td>
-            <img src="{{ supplier.foto.url }}" width="50px" />
-          </td>
-          <td>{{ supplier.name }}</td>
-          <td>{{ supplier.ruc}}</td>
-          <td>{{ supplier.address }}</td>
-          <td>{{ supplier.phone }}</td>
-          <td>{% if supplier.state %} ✔ {% else %} ➖ {% endif %}</td>
-          <td>
-            <a href="{% url 'core:supplier_update' supplier.id %}">✏️</a>
-            <a href="{% url 'core:supplier_delete' supplier.id %}">❌</a>
-          </td>
-        </tr>
-        {% endfor %}
-      </tbody>
-    </table>
-    <div class="form-group">
-      <a class="btn btn-primary" href="{% url 'core:supplier_create' %}"
-        >Agregar un Proveedor</a
-      >
-    </div>
+    <h1 class="title text-center">{{ title2 }}</h1>
+    <main class="container">
+      <div class="card card-body">
+        <h2 class="text-center">{{ title1 }}</h2>
+
+        <table class="table table-striped">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Imagen</th>
+              <th>Nombre</th>
+              <th>Ruc / C.I</th>
+              <th>Direccòn</th>
+              <th>Nº Celular</th>
+              <th>Estado</th>
+              <th>Acciones</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for supplier in suppliers %}
+            <tr>
+              <td>{{ forloop.counter }}</td>
+              <td>
+                <img src="{{ supplier.foto.url }}" width="50px" />
+              </td>
+              <td>{{ supplier.name }}</td>
+              <td>{{ supplier.ruc}}</td>
+              <td>{{ supplier.address }}</td>
+              <td>{{ supplier.phone }}</td>
+              <td>{% if supplier.state %} ✔ {% else %} ➖ {% endif %}</td>
+              <td>
+                <a href="{% url 'core:supplier_update' supplier.id %}">✏️</a>
+                <a href="{% url 'core:supplier_delete' supplier.id %}">❌</a>
+              </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+        <div class="form-group">
+          <a class="btn btn-primary" href="{% url 'core:supplier_create' %}"
+            >Agregar un Proveedor</a
+          >
+        </div>
+      </div>
+    </main>
+    {% endblock %}
   </div>
 </main>
-{% endblock %}
