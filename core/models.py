@@ -146,9 +146,11 @@ class Category(models.Model):
 
     def __str__(self):
         return f"{self.description}"
-
-
-
+        
+    def clean(self):
+        super().clean()
+        if Category.objects.filter(description=self.description).exclude(id=self.id).exists():
+            raise ValidationError('Ya existe una categoría con este nombre.')
 
 
 class Customer(models.Model):

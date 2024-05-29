@@ -219,7 +219,7 @@ def category_delete(request,id):
         category.delete()
         return redirect("core:category_list")
  
-    return render(request, "core/category/delete.html", data)
+    return render(request, "core/categorys/delete.html", data)
     
 # vistas de marcas: Listar marcas
 @never_cache
