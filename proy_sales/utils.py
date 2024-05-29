@@ -1,13 +1,13 @@
 from django.core.exceptions import ValidationError
-<<<<<<< HEAD
+
 from django.core.validators import RegexValidator, EmailValidator
 
 phone_regex = RegexValidator(regex=r'^\d{9,15}$', message="El número de teléfono debe contener entre 9 y 15 dígitos.")
  
-=======
+
 import re
 
->>>>>>> 8ab19a2 (casi listo)
+
 def valida_cedula(value):
     cedula = str(value)
     if not cedula.isdigit():
@@ -54,9 +54,6 @@ def valida_ruc(value):
     if digito_verificador != int(ruc[12]):
         raise ValidationError('El RUC no es válido.')
 
-
-<<<<<<< HEAD
-=======
 def valida_ruc_o_cedula(value):
     cedula = str(value)
     if not cedula.isdigit():
@@ -110,6 +107,5 @@ def valida_telefono_ecuador(value):
         raise ValidationError('El número de teléfono no es válido. Debe ser un número de celular o un número de teléfono convencional de Ecuador.')
 
 
->>>>>>> 8ab19a2 (casi listo)
 def validar_email(value):
     pass
