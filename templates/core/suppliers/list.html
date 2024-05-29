@@ -1,18 +1,10 @@
 {% extends 'base.html' %} {% block content %}
-<<<<<<< HEAD
-<h2>{{ title1 }}</h2>
-<h3>{{ title2 }}</h3>
-
-<main class="container">
-  <div class="card card-body">
-=======
 <h1 class="title text-center">{{ title2 }}</h1>
 
 <main class="container">
   <div class="card card-body">
     <h2 class="text-center">{{ title1 }}</h2>
     <h3>{{ title2 }}</h3>
->>>>>>> 8ab19a2 (casi listo)
     <table class="table table-striped">
       <thead>
         <tr>
@@ -37,11 +29,7 @@
           <td>{{ supplier.ruc}}</td>
           <td>{{ supplier.address }}</td>
           <td>{{ supplier.phone }}</td>
-<<<<<<< HEAD
-          <td>{{ supplier.state }}</td>
-=======
           <td>{% if supplier.state %} ✔ {% else %} ➖ {% endif %}</td>
->>>>>>> 8ab19a2 (casi listo)
           <td>
             <a href="{% url 'core:supplier_update' supplier.id %}">✏️</a>
             <a href="{% url 'core:supplier_delete' supplier.id %}">❌</a>

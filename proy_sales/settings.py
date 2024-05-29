@@ -121,7 +121,7 @@ STATIC_URL = '/static/' # url de archivos estaticos
 STATICFILES_DIRS = (os.path.join(BASE_DIR, 'static'),)#carpeta fisica de archivos estaticos
 MEDIA_ROOT = os.path.join(BASE_DIR,'media') # carpeta fisica de archivos de Imagenes
 MEDIA_URL = '/media/' # url de imagenes
-
+LOGIN_URL = '/login'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field

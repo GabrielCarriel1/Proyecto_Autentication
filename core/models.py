@@ -44,15 +44,9 @@ class Brand(models.Model):
 class Supplier(models.Model):
     foto = models.ImageField(upload_to='suplier/',blank=True,null=True,default='suppliers/default.png')
     name = models.CharField('nombre',max_length=100)
-
-    ruc = models.CharField('*Ruc / C.I',max_length=13,validators=[valida_cedula,valida_ruc])
-    address = models.CharField('Direccion',max_length=500)
-    phone = models.CharField('Nº Celular',max_length=20,validators=[phone_regex])
-
     ruc = models.CharField('*Ingrese Ruc/ C.I',max_length=13,validators=[valida_ruc_o_cedula])
     address = models.CharField('Direccion',max_length=500)
     phone = models.CharField('Nº Celular',max_length=20,validators=[valida_telefono_ecuador])
-
     user = models.ForeignKey(User,on_delete=models.CASCADE)
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
@@ -99,7 +93,7 @@ class Product(models.Model):
     expiration_date = models.DateTimeField('Fecha Caducidad',default=timezone.now)
     brand = models.ForeignKey(Brand,on_delete=models.CASCADE,related_name='product',verbose_name='Marca')
     user = models.ForeignKey(User,on_delete=models.CASCADE)
-    supplier = models.OneToOneField(Supplier,on_delete=models.CASCADE,verbose_name='Proveedor')
+    supplier = models.ForeignKey(Supplier,on_delete=models.CASCADE,verbose_name='Proveedor')
     categories = models.ManyToManyField('Category',verbose_name='Categoria')
     line = models.CharField('Linea',max_length=2,choices=Status.choices,default=Status.COMISARIATO)
     image = models.ImageField(upload_to='products/',blank=True,null=True,default='products/default.png')

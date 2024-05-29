@@ -9,19 +9,12 @@
           <form method="post" enctype="multipart/form-data">
             {% csrf_token %} {{ form.as_p }}
             <div>
-<<<<<<< HEAD
-              <button type="submit" class="btn btn-primary">Guardar</button>
-              <a href="{% url 'core:brand_list' %}" class="btn btn-secondary"
-                >Cancelar</a
-              >
-=======
               <button type="submit" class="btn btn-primary">
                 Guardar Marca
               </button>
               <a href="{% url 'core:brand_list' %}" class="btn btn-secondary"
                 >Regresar
               </a>
->>>>>>> 8ab19a2 (casi listo)
             </div>
           </form>
         </div>
