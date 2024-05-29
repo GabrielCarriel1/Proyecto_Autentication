@@ -52,6 +52,9 @@ class Supplier(models.Model):
     updated = models.DateTimeField(auto_now=True)
     state = models.BooleanField('Activo', default = True)
 
+    def __str__(self):
+        return self.name
+
     def clean(self):
         super().clean()
 
