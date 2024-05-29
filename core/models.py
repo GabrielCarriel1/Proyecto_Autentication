@@ -132,7 +132,7 @@ class Product(models.Model):
          Product.objects.filter(pk=id).update(stock=F('stock') - quantity)
             
 class Category(models.Model):
-    description = models.CharField(verbose_name='Categoría', max_length=100)
+    description = models.CharField(verbose_name='Nombre Categoría', max_length=250)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)

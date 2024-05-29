@@ -48,6 +48,11 @@
                   >Proveedores</a
                 >
               </li>
+              <li class="nav-item">
+                <a href="{% url 'core:category_list' %}" class="nav-link active"
+                  >Category</a
+                >
+              </li>
 
               {% if user.is_authenticated %}
               <li class="nav-item">

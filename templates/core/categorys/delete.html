@@ -1,0 +1,31 @@
+{% extends 'base.html' %} {% block content %}
+<main class="container">
+  <div class="row">
+    <div class="col-md-6 offset-md-3">
+      <div class="card card-body mt-5">
+        <div class="text-center">
+          <form
+            class="mt-4"
+            method="POST"
+            action="{% url 'core:category_delete' category.id %}"
+          >
+            {% csrf_token %}
+            <h1 class="title">{{ title2 }}</h1>
+            <h3>
+              ¿Desea Eliminar la categoría " {{category.description }} " ?
+            </h3>
+            <div>
+              <button class="btn btn-danger mr-2" type="submit">
+                Eliminar Categoría
+              </button>
+              <a class="btn btn-secondary" href="{% url 'core:category_list' %}"
+                >Regresar
+              </a>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+{% endblock content %}

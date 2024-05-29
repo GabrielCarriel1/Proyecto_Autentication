@@ -16,7 +16,7 @@ class SupplierForm(forms.ModelForm):
         model=Supplier
         fields=['foto','name','ruc','address','phone','state']
 
-class SupplierForm(forms.ModelForm):
+class CategoryForm(forms.ModelForm):
     class Meta:
-        model=Supplier
-        fields=['foto','name','ruc','address','phone','state']
+        model=Category
+        fields=['description','state']

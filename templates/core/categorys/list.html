@@ -1,0 +1,43 @@
+{% extends 'base.html' %} {% block content %}
+
+<main class="container py-5">
+  <div class="card card-body">
+    <h1 class="title text-center">{{ title2 }}</h1>
+
+    <main class="container">
+      <div class="card card-body">
+        <h2 class="text-center">{{ title1 }}</h2>
+
+        <table class="table table-striped">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Nombre Marca</th>
+              <th>Estado</th>
+              <th>Acciones</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for category in categorys %}
+            <tr>
+              <td>{{ forloop.counter }}</td>
+              <td>{{ category.description }}</td>
+              <td>{{ category.state|yesno:"Activo,Inactivo" }}</td>
+              <td>
+                <a href="{% url 'core:category_update' category.id %}">✏️</a>
+                <a href="{% url 'core:category_delete' category.id %}">❌</a>
+              </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+        <div class="form-group">
+          <a class="btn btn-primary" href="{% url 'core:category_create' %}"
+            >Añadir Categoría</a
+          >
+        </div>
+      </div>
+    </main>
+    {% endblock %}
+  </div>
+</main>

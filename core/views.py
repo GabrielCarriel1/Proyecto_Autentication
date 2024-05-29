@@ -3,8 +3,8 @@ from django.shortcuts import redirect, render
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth.models import User
 from django.contrib.auth import login,logout, authenticate
-from core.forms import ProductForm, BrandForm, SupplierForm
-from core.models import Product, Brand, Supplier
+from core.forms import ProductForm, BrandForm, SupplierForm,CategoryForm
+from core.models import Product, Brand, Supplier, Category
 from django.db import IntegrityError
 import re
 from django.http import HttpResponse, JsonResponse, HttpResponseRedirect
@@ -161,6 +161,21 @@ def supplier_update(request,id):
         data["form"]=form
     return render(request, "core/suppliers/form.html", data)
 
+@never_cache
+@login_required
+def category_update(request,id):
+    data = {"title1": "Categoría","title2": "Edicion De categoría"}
+    category = Category.objects.get(pk=id)
+    if request.method == "POST":
+      form = CategoryForm(request.POST,request.FILES, instance=category)
+      if form.is_valid():
+            form.save()
+            return redirect("core:category_list")
+    else:
+        form = CategoryForm(instance=category)
+        data["form"]=form
+    return render(request, "core/categorys/form.html", data)
+
 
 # eliminar un producto
 @login_required
@@ -194,6 +209,18 @@ def brand_delete(request,id):
         brand.delete()
         return redirect("core:brand_list")
     return render(request, "core/brands/delete.html", data)
+
+@login_required
+@never_cache
+def category_delete(request,id):
+    category = Category.objects.get(pk=id)
+    data = {"title1":"Eliminar","title2":"Eliminar una categoría","category": category}
+    if request.method == "POST":
+        category.delete()
+        return redirect("core:category_list")
+ 
+    return render(request, "core/category/delete.html", data)
+    
 # vistas de marcas: Listar marcas
 @never_cache
 @login_required
@@ -238,7 +265,42 @@ def supplier_List(request):
     suppliers = Supplier.objects.all()  # Obtener todos los proveedores
     data["suppliers"] = suppliers
     return render(request, "core/suppliers/list.html", data)
-  
+
+#listar categoría
+@never_cache
+@login_required
+def category_List(request):
+    data = {
+        "title1": "Categoría",
+        "title2": "Consulta De Categoría"
+    }
+    categorys = Category.objects.all()  # Obtener todos los proveedores
+    data["categorys"] = categorys
+    return render(request, "core/categorys/list.html", data)
+
+
+@never_cache
+@login_required
+def category_create(request):
+    data = {
+        "title1": "Crear Categoría",
+        "title2": "Ingreso de Categorías"
+    }
+
+    if request.method == "POST":
+        form = CategoryForm(request.POST, request.FILES)
+        if form.is_valid():
+            category = form.save(commit=False)
+            category.user = request.user
+            category.save()
+            return redirect("core:category_list")
+    else:
+        form = CategoryForm()
+
+    data["form"] = form
+    return render(request, "core/categorys/form.html", data)
+
+
 @never_cache
 @login_required
 def supplier_create(request):
@@ -250,10 +312,6 @@ def supplier_create(request):
     if request.method == "POST":
         form = SupplierForm(request.POST, request.FILES)
         if form.is_valid():
-
-            brand = form.save(commit=False)
-            brand.user = request.user
-            brand.save()
             Supplier = form.save(commit=False)
             Supplier.user = request.user
             Supplier.save()
