@@ -1,7 +1,7 @@
 {% extends 'base.html' %} {% block content %}
 
 <main class="container">
-  <div class="card card-body">
+  <div class="card card-body" style='margin-top: 50px;'>
     <h1 class="title text-center">{{ title2 }}</h1>
 
     <main class="container">
@@ -12,14 +12,9 @@
           <thead>
             <tr>
               <th>#</th>
-
               <th>Logo</th>
-              <th>Descripción</th>
-
-              <th>Imagen Marca</th>
-              <th>Nombre marca</th>
-
-              <th>Fecha de Creación</th>
+              <th>Nombre</th>
+              <th>Agregada</th>
               <th>Estado</th>
               <th>Acciones</th>
             </tr>
@@ -32,8 +27,8 @@
                 <img src="{{ brand.logo.url }}" width="50px" />
               </td>
               <td>{{ brand.description }}</td>
-              <td>{{ brand.created|date:"d/m/Y H:i" }}</td>
-              <td>{{ brand.state|yesno:"Activo,Inactivo" }}</td>
+              <td>{{ brand.created|date:"d/m/Y" }}</td>
+              <td>{% if brand.state %} ✔ {% else %} ➖ {% endif %}</td>
               <td>
                 <a href="{% url 'core:brand_update' brand.id %}">✏️</a>
                 <a href="{% url 'core:brand_delete' brand.id %}">❌</a>

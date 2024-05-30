@@ -25,7 +25,7 @@
         <tbody>
           {% for item in products %}
           <tr>
-            <td><img src="{{ item.image.url }}" alt="" width="50px" /></td>
+            <td><img src={{ item.image.url }} alt="" width="50px" /></td>
             <td>{{ item.description }}</td>
             <td>{{ item.price }}</td>
             <td>{{ item.stock }}</td>
@@ -36,8 +36,8 @@
             <td>{{ item.expiration_date | date:"Y-m-d" }}</td>
             <td>{% if item.state %} ✔ {% else %} ➖ {% endif %}</td>
             <td>
-              <a href="{% url 'core:product_update' item.id %}">✏️</a>
-              <a href="{% url 'core:product_delete' item.id %}">❌</a>
+              <a href={% url 'core:product_update' item.id %}>✏️</a>
+              <a href={% url 'core:product_delete' item.id %}>❌</a>
             </td>
           </tr>
           {% endfor %}

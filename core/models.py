@@ -2,9 +2,8 @@ from decimal import Decimal
 from django.db import models
 from django.contrib.auth.models import User
 from django.utils import timezone
-from django.db.models import F 
-
-from proy_sales.utils import valida_cedula,phone_regex, valida_ruc
+from datetime import timedelta
+from django.db.models import F
 from proy_sales.utils import valida_ruc_o_cedula, valida_telefono_ecuador
 from django.core.exceptions import ValidationError
 
@@ -17,8 +16,6 @@ class ActiveBrandManager(models.Manager):
  
 class Brand(models.Model):
     description = models.CharField('Nombre de la Marca', max_length=100)
-    logo = models.ImageField(upload_to='brands/',blank=True,null=True,default='brands/default.png')
-
     logo = models.ImageField('Imagen Marca',upload_to='brands/',blank=True,null=True,default='brands/default.png')
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     created = models.DateTimeField(auto_now_add=True)
@@ -93,7 +90,7 @@ class Product(models.Model):
     price=models.DecimalField('Precio',max_digits=10,decimal_places=2,default=Decimal('0.0'))
     stock=models.IntegerField(default=100,help_text="Stock debe estar en 0 y 10000 unidades",verbose_name='Stock')
     iva = models.IntegerField(verbose_name='IVA', choices=((0,'0%'),(5,'5%'),(15,'15%')), default=15)
-    expiration_date = models.DateTimeField('Fecha Caducidad',default=timezone.now)
+    expiration_date = models.DateTimeField('Fecha Caducidad',default=timezone.now()+timedelta(days=60))
     brand = models.ForeignKey(Brand,on_delete=models.CASCADE,related_name='product',verbose_name='Marca')
     user = models.ForeignKey(User,on_delete=models.CASCADE)
     supplier = models.ForeignKey(Supplier,on_delete=models.CASCADE,verbose_name='Proveedor')

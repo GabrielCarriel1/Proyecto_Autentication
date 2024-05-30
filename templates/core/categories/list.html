@@ -12,19 +12,17 @@
           <thead>
             <tr>
               <th>#</th>
-              <th>Nombre Marca</th>
-              <th>F. Creación</th>
-              <th>Estado</th>
+              <th>Descripción</th>
+              <th>Agregado</th>
               <th>Acciones</th>
             </tr>
           </thead>
           <tbody>
-            {% for category in categorys %}
+            {% for category in categories %}
             <tr>
               <td>{{ forloop.counter }}</td>
               <td>{{ category.description }}</td>
-              <td>{{ category.created}}</td>
-              <td>{{ category.state|yesno:"Activo,Inactivo" }}</td>
+              <td>{{ category.created | date:"d/m/Y" }}</td>
               <td>
                 <a href="{% url 'core:category_update' category.id %}">✏️</a>
                 <a href="{% url 'core:category_delete' category.id %}">❌</a>

@@ -219,7 +219,7 @@ def category_delete(request,id):
         category.delete()
         return redirect("core:category_list")
  
-    return render(request, "core/categorys/delete.html", data)
+    return render(request, "core/categories/delete.html", data)
     
 # vistas de marcas: Listar marcas
 @never_cache
@@ -271,12 +271,12 @@ def supplier_List(request):
 @login_required
 def category_List(request):
     data = {
-        "title1": "Categoría",
+        "title1": "Categorías",
         "title2": "Consulta De Categoría"
     }
-    categorys = Category.objects.all()  # Obtener todos los proveedores
-    data["categorys"] = categorys
-    return render(request, "core/categorys/list.html", data)
+    categories = Category.objects.all()  # Obtener todos los proveedores
+    data["categories"] = categories
+    return render(request, "core/categories/list.html", data)
 
 
 @never_cache
@@ -298,7 +298,7 @@ def category_create(request):
         form = CategoryForm()
 
     data["form"] = form
-    return render(request, "core/categorys/form.html", data)
+    return render(request, "core/categories/form.html", data)
 
 
 @never_cache
