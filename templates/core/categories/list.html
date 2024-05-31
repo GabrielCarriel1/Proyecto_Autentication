@@ -13,6 +13,7 @@
             <tr>
               <th>#</th>
               <th>Descripción</th>
+              <th>Núm. de productos</th>
               <th>Agregado</th>
               <th>Acciones</th>
             </tr>
@@ -22,6 +23,7 @@
             <tr>
               <td>{{ forloop.counter }}</td>
               <td>{{ category.description }}</td>
+              <td>{{ category.num_productos }}</td>
               <td>{{ category.created | date:"d/m/Y" }}</td>
               <td>
                 <a href="{% url 'core:category_update' category.id %}">✏️</a>

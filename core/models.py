@@ -94,7 +94,7 @@ class Product(models.Model):
     brand = models.ForeignKey(Brand,on_delete=models.CASCADE,related_name='product',verbose_name='Marca')
     user = models.ForeignKey(User,on_delete=models.CASCADE)
     supplier = models.ForeignKey(Supplier,on_delete=models.CASCADE,verbose_name='Proveedor')
-    categories = models.ManyToManyField('Category',verbose_name='Categoria')
+    categories = models.ManyToManyField('Category',verbose_name='Categoria', related_name='productos')
     line = models.CharField('Linea',max_length=2,choices=Status.choices,default=Status.COMISARIATO)
     image = models.ImageField(upload_to='products/',blank=True,null=True,default='products/default.png')
     created = models.DateTimeField(auto_now_add=True)
@@ -143,6 +143,10 @@ class Category(models.Model):
 
     def __str__(self):
         return f"{self.description}"
+    
+    @property
+    def num_productos(self):
+        return self.productos.count()
         
     def clean(self):
         super().clean()
