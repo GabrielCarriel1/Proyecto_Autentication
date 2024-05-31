@@ -13,8 +13,8 @@
             <tr>
               <th>#</th>
               <th>Descripción</th>
-              <th>Núm. de productos</th>
               <th>Agregado</th>
+              <th>Estado</th>
               <th>Acciones</th>
             </tr>
           </thead>
@@ -23,8 +23,8 @@
             <tr>
               <td>{{ forloop.counter }}</td>
               <td>{{ category.description }}</td>
-              <td>{{ category.num_productos }}</td>
               <td>{{ category.created | date:"d/m/Y" }}</td>
+              <th>{% if category.state %} ✔ {% else %} ➖ {% endif %}</th>
               <td>
                 <a href="{% url 'core:category_update' category.id %}">✏️</a>
                 <a href="{% url 'core:category_delete' category.id %}">❌</a>

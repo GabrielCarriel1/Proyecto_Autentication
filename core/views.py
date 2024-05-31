@@ -175,7 +175,7 @@ def category_update(request,id):
     else:
         form = CategoryForm(instance=category)
         data["form"]=form
-    return render(request, "core/categorys/form.html", data)
+    return render(request, "core/categories/form.html", data)
 
 
 # eliminar un producto
